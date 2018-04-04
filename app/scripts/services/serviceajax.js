@@ -117,7 +117,7 @@ angular.module('fouilleDeDonneesProjetsApp')
           var val= countAttributeVal(data)
           .then(function(res){
             console.log("count1",res);
-            count1=parseInt(res,10);
+            count1=res;
             return countAllAttributeVal(data);
           })
           .then(function(res){
@@ -133,8 +133,12 @@ angular.module('fouilleDeDonneesProjetsApp')
                   .hideDelay(6000)
               );
             }else{
-              console.log("count1/count2",count1/count2);
-              return count1/count2;
+
+                var val = count1/count2;
+                console.log("count1/count2",val);
+                return val;
+
+
             }
           })
           .catch(function(err){
@@ -152,11 +156,13 @@ angular.module('fouilleDeDonneesProjetsApp')
 
             var count1=0;
             var count2=0;
+            var k=0;
 
             var val= countAttributeValCondi(data)
             .then(function(res){
               console.log("count1",res);
-              count1=parseInt(res,10);
+              count1=parseInt(res.val,10);
+              k=parseInt(res.k,10);
               return countAllAttributeValCondi(data);
             })
             .then(function(res){
@@ -172,8 +178,18 @@ angular.module('fouilleDeDonneesProjetsApp')
                     .hideDelay(6000)
                 );
               }else{
-                console.log("count1/count2",count1/count2);
-                return count1/count2;
+                if(k==1){
+                  var val = count1/(count2+k);
+                  console.log("count1/count2 k="+k,val);
+                  return val;
+
+                }else{
+                  var val = count1/count2;
+                  console.log("count1/count2",val);
+                  return val;
+                }
+                //console.log("count1/count2",count1/count2);
+                return val;
               }
             })
             .catch(function(err){

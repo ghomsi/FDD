@@ -60,8 +60,42 @@ exports.countattributeValCondi = function(req,res){
       console.log(err);
       res.send(err);
     }
-    console.log('count',count);
-    res.send(''+count);
+    var a={val:0,k:0};
+    console.log("testcount",count);
+    if(count==0){
+      a.k=1;
+      var laplace=[];
+      if(attr=="outlook") laplace.push([
+         { $group: { _id: "$outlook", count: { $sum: 1 } } }
+      ]);
+      if(attr=="temp") laplace.push([
+         { $group: { _id: "$temp", count: { $sum: 1 } } }
+      ]);
+      if(attr=="humidity") laplace.push([
+         { $group: { _id: "$humidity", count: { $sum: 1 } } }
+      ]);
+      if(attr=="windy") laplace.push([
+         { $group: { _id: "$windy", count: { $sum: 1 } } }
+      ]);
+      //console.log("testcount",laplace);
+        schema.donneesText.aggregate(laplace).exec(function(err,p){
+          if(err){
+            console.log(err);
+          }
+          console.log('laplace p=',p);
+          //return p.length;
+          console.log('laplace count p=',p.length);
+          a.val = (count+(1/p.length))
+          console.log('count a=',a);
+          res.send(a)
+        });
+      ;
+    }else{
+      a.val=count;
+      console.log('count a=',a);
+      res.send(a);
+    }
+
   });
 }
 
