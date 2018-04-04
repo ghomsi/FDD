@@ -1,0 +1,24 @@
+<table>
+  <h3 ng-if="items.length>0"> resultat(s): {{items.length}} <md-icon>picture_as_pdf</md-icon></h3>
+  <h3 class="new badge" ng-if="items.length==0"> Base de donnés Vides</h3>
+  <thead ng-if="items.length>0">
+    <tr>
+      <td><b>outlook</b></td>
+      <td><b>temp</b></td>
+      <td><b>humidity</b></td>
+      <td><b>windy</b></td>
+      <td><b>play(Decision)</b></td>
+      <td><b>probabilités</b></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in items">
+      <td>{{item.outlook}}</td>
+      <td>{{item.temp}}</td>
+      <td>{{item.humidity}}</td>
+      <td>{{item.windy}}</td>
+      <td><b>{{item.play}}</b></td>
+      <td><b>Pr(yes/jouer)={{item.prYes}}<br>Pr(no/jouer)={{item.prNo}}</b></td>
+    </tr>
+  </tbody>
+</table>

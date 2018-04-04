@@ -1,0 +1,38 @@
+
+<md-dialog aria-label="Données">
+  <form ng-cloak>
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>
+          <md-icon>cloud_download</md-icon>
+          Importer des données
+        </h2>
+        <span flex></span>
+        <md-button class="md-icon-button" ng-click="cancel()">
+          <md-icon aria-label="Close dialog">close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <p>Initialisation de la base de connaissance</p>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label>Fichier excell</label>
+          <input type="file" sheet-js-import="" multiple="false">
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+
+    <md-dialog-actions layout="row">
+
+      <span flex></span>
+      <md-button ng-click="answer('not useful')">
+       Fermer
+      </md-button>
+      <!--<md-button ng-click="answer('useful')">
+        Useful
+      </md-button>-->
+    </md-dialog-actions>
+  </form>
+</md-dialog>

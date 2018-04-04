@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>FDD</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.css" />
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+    <link rel="stylesheet" href="bower_components/animate.css/animate.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="fouilleDeDonneesProjetsApp">
+    <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <div ng-controller="MainCtrl as ctrl" ng-cloak>
+      <md-toolbar style="position:fixed" class="md-menu-toolbar">
+        <div layout="row">
+          <div>
+            <h2 class="md-toolbar-tools">FDD Jouer Tennis task :  <b> {{methode.radio}}</b></h2>
+            <md-menu-bar>
+              <md-menu>
+                <button ng-click="$mdMenu.open()">
+                  Fichier
+                </button>
+                <md-menu-content>
+                  <md-menu-item>
+                    <md-button ng-click="ctrl.showImport($event)">
+                      <md-icon>cloud_download</md-icon>
+                      importer des données
+                    </md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button ng-click="ctrl.showBD($event)">
+                      <md-icon>remove_red_eye</md-icon>
+                      afficher les données
+                    </md-button>
+                  </md-menu-item>
+                  <md-menu-divider></md-menu-divider>
+                  <md-menu-item>
+                    <md-button ng-click="ctrl.excellModele()">
+                      <md-icon>cloud_upload</md-icon>
+                      télécharger le fichier modèle
+                    </md-button>
+                  </md-menu-item>
+                  <md-menu-item>
+                    <md-button ng-click="ctrl.delCollection($event)">
+                      <md-icon>delete</md-icon>
+                      Vider la base de donnée
+                    </md-button>
+                  </md-menu-item>
+                </md-menu-content>
+              </md-menu>
+              <md-menu>
+                <button ng-click="$mdMenu.open()">
+                  Methodes
+                </button>
+                <md-menu-content>
+                  <md-menu-item class="md-indent">
+                    <md-radio-group ng-model="methode.radio">
+
+                      <md-radio-button ng-click="ctrl.bayesAction('bayes', $event)" value="bayes" class="md-primary">Bayes</md-radio-button>
+                      <md-radio-button ng-click="ctrl.abdAction('ABD', $event)" value="ABD"> Arbre de Décision </md-radio-button>
+
+                    </md-radio-group>
+
+                    <!--<md-button ng-click="ctrl.sampleAction('bayes', $event)">
+                      Bayes
+                    </md-button>-->
+                  </md-menu-item>
+              </md-menu>
+              <button ng-click="ctrl.executer($event)">
+                <md-icon>play_circle_filled</md-icon>
+                Exécuter
+              </button>
+              <!--<md-menu>
+                <button ng-click="$mdMenu.open()">
+                  View
+                </button>
+                <md-menu-content>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.printLayout">Print layout</md-menu-item>
+                  <md-menu-item class="md-indent">
+                    <md-menu>
+                      <md-button ng-click="$mdMenu.open()">Mode</md-button>
+                      <md-menu-content width="3">
+                        <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'presentation'">Presentation</md-menu-item>
+                        <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'edit'">Edit</md-menu-item>
+                        <md-menu-item type="radio" ng-model="ctrl.settings.presentationMode" value="'modifiable'">Modifiable</md-menu-item>
+                      </md-menu-content>
+                    </md-menu>
+                  </md-menu-item>
+                  <md-menu-divider></md-menu-divider>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.showRuler">Show ruler</md-menu-item>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.showEquationToolbar">Show equation toolbar</md-menu-item>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.showSpellingSuggestions">Show spelling suggestions</md-menu-item>
+                  <md-menu-divider></md-menu-divider>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.compactControls">Compact controls</md-menu-item>
+                  <md-menu-item type="checkbox" ng-model="ctrl.settings.fullScreen">Full screen</md-menu-item>
+                </md-menu-content>
+              </md-menu>-->
+            </md-menu-bar>
+          </div>
+        </div>
+        <md-progress-linear ng-show='busy' md-mode="indeterminate" class="md-accent md-hue-3"></md-progress-linear>
+      </md-toolbar>
+
+      <div style="height:100px;"></div>
+      <md-content style="position:sticky" layout="row" layout-wrap>
+        <div style="padding: 24px;" flex="15">
+          <img hide-xs="" ng-show="meth2" style="height:50px;position:fixed" class="responsive-img" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGlkPSJMYXllcl8xIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA2NCA2NDsiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDY0IDY0IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48c3R5bGUgdHlwZT0idGV4dC9jc3MiPgoJLnN0MHtmaWxsOiMxMzQ1NjM7fQo8L3N0eWxlPjxnPjxnIGlkPSJJY29uLVNoYXJlLUdvb2dsZSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjgwLjAwMDAwMCwgMzgwLjAwMDAwMCkiPjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0tMjY0LjItMzM5LjljLTQuNCwwLTcuOS0zLjUtNy45LTcuOWMwLTQuNCwzLjUtNy45LDcuOS03LjljNC40LDAsNy45LDMuNSw3LjksNy45ICAgICBDLTI1Ni4zLTM0My41LTI1OS44LTMzOS45LTI2NC4yLTMzOS45TC0yNjQuMi0zMzkuOXogTS0yNjQuMi0zNTIuOGMtMi43LDAtNC45LDIuMi00LjksNC45YzAsMi43LDIuMiw0LjksNC45LDQuOSAgICAgYzIuNywwLDQuOS0yLjIsNC45LTQuOUMtMjU5LjMtMzUwLjUtMjYxLjUtMzUyLjgtMjY0LjItMzUyLjhMLTI2NC4yLTM1Mi44eiIgaWQ9IkZpbGwtNjEiLz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNLTIzMi4xLTM1NmMtNC40LDAtNy45LTMuNS03LjktNy45czMuNS03LjksNy45LTcuOXM3LjksMy41LDcuOSw3LjlTLTIyNy44LTM1Ni0yMzIuMS0zNTYgICAgIEwtMjMyLjEtMzU2eiBNLTIzMi4xLTM2OC44Yy0yLjcsMC00LjksMi4yLTQuOSw0LjlzMi4yLDQuOSw0LjksNC45czQuOS0yLjIsNC45LTQuOVMtMjI5LjQtMzY4LjgtMjMyLjEtMzY4LjhMLTIzMi4xLTM2OC44eiIgaWQ9IkZpbGwtNjIiLz48cGF0aCBjbGFzcz0ic3QwIiBkPSJNLTIzMi4xLTMyMy45Yy00LjQsMC03LjktMy41LTcuOS03LjlzMy41LTcuOSw3LjktNy45czcuOSwzLjUsNy45LDcuOSAgICAgUy0yMjcuOC0zMjMuOS0yMzIuMS0zMjMuOUwtMjMyLjEtMzIzLjl6IE0tMjMyLjEtMzM2LjdjLTIuNywwLTQuOSwyLjItNC45LDQuOXMyLjIsNC45LDQuOSw0LjlzNC45LTIuMiw0LjktNC45ICAgICBTLTIyOS40LTMzNi43LTIzMi4xLTMzNi43TC0yMzIuMS0zMzYuN3oiIGlkPSJGaWxsLTYzIi8+PHBvbHlsaW5lIGNsYXNzPSJzdDAiIGlkPSJGaWxsLTY0IiBwb2ludHM9Ii0yMzguNiwtMzMzLjIgLTI1OS4yLC0zNDMuNSAtMjU3LjgsLTM0Ni40IC0yMzcuMSwtMzM2LjEgLTIzOC42LC0zMzMuMiAgICAiLz48cG9seWxpbmUgY2xhc3M9InN0MCIgaWQ9IkZpbGwtNjUiIHBvaW50cz0iLTI1Ny44LC0zNDkuMyAtMjU5LjIsLTM1Mi4xIC0yMzguNiwtMzYyLjQgLTIzNy4xLC0zNTkuNiAtMjU3LjgsLTM0OS4zICAgICIvPjwvZz48L2c+PC9zdmc+">
+
+          <img hide-xs="" ng-show="meth1" style="height:50px;position:fixed" class="responsive-img" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iOTYiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDExNSA5NiIgd2lkdGg9IjExNSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PHBhdGggZD0iTTk5Ljk0OCA0Mi44MzZjLTEuMTQgMC0yLjI2NCAwLjEzNi0zLjM4OCAwLjQwOC0xLjAxNi0xMS41LTExLjA0MC0yMC4yNDgtMjMuNjQ0LTIwLjI0OC04LjkxNiAwLTguOTE2IDIuMzg4LTguOTE2IDMuMjc2djQ0LjcyOGMwIDEuMSAwLjg5NiAyIDIgMmwzMy45NTYtMC4wMjRjOCAwIDE0Ljc1Mi02LjkwOCAxNC43NTItMTUuMDcyIDAuMDA0LTguMzA4LTYuNjE2LTE1LjA2OC0xNC43Ni0xNS4wNjh6IiBmaWxsPSIjMDAwMDAwIi8+PHBhdGggZD0iTTU4IDIzYy0xLjEwNCAwLTIgMC45LTIgMnY0NGMwIDEuMSAwLjg5NiAyIDIgMnMyLTAuOSAyLTJ2LTQ0Yy0wLjAwNC0xLjEtMC44OTYtMi0yLTJ6IiBmaWxsPSIjMDAwMDAwIi8+PHBhdGggZD0iTTUwIDI3Yy0xLjEwNCAwLTIgMC45LTIgMnY0MGMwIDEuMSAwLjg5NiAyIDIgMnMyLTAuOSAyLTJ2LTQwYzAtMS4xLTAuODk2LTItMi0yeiIgZmlsbD0iIzAwMDAwMCIvPjxwYXRoIGQ9Ik00MiAzMWMtMS4xMDQgMC0yIDAuOS0yIDJ2MzZjMCAxLjEgMC44OTYgMiAyIDJzMi0wLjkgMi0ydi0zNmMwLTEuMS0wLjg5Ni0yLTItMnoiIGZpbGw9IiMwMDAwMDAiLz48cGF0aCBkPSJNMzQgMzFjLTEuMTA0IDAtMiAwLjktMiAydjM2YzAgMS4xIDAuODk2IDIgMiAyczItMC45IDItMnYtMzZjMC0xLjEtMC44OTYtMi0yLTJ6IiBmaWxsPSIjMDAwMDAwIi8+PHBhdGggZD0iTTI2IDI3Yy0xLjEwNCAwLTIgMC45LTIgMnY0MGMwIDEuMSAwLjg5NiAyIDIgMnMyLTAuOSAyLTJ2LTQwYzAtMS4xLTAuODk2LTItMi0yeiIgZmlsbD0iIzAwMDAwMCIvPjxwYXRoIGQ9Ik0xOCAzMWMtMS4xMDQgMC0yIDAuOS0yIDJ2MzZjMCAxLjEgMC44OTYgMiAyIDJzMi0wLjkgMi0ydi0zNmMwLTEuMS0wLjg5Ni0yLTItMnoiIGZpbGw9IiMwMDAwMDAiLz48cGF0aCBkPSJNMTAgMzVjLTEuMTA0IDAtMiAwLjktMiAydjI4YzAgMS4xIDAuODk2IDIgMiAyczItMC45IDItMnYtMjhjMC0xLjEtMC44OTYtMi0yLTJ6IiBmaWxsPSIjMDAwMDAwIi8+PHBhdGggZD0iTTIgNDNjLTEuMTA0IDAtMiAwLjktMiAydjE2YzAgMS4xIDAuODk2IDIgMiAyczItMC45IDItMnYtMTZjMC0xLjEtMC44OTYtMi0yLTJ6IiBmaWxsPSIjMDAwMDAwIi8+PC9zdmc+">
+          <br>
+          <br>
+          <h4 hide-xs="" ng-show="meth2">Arbre de Decision</h1>
+          <!--<h5 hide-gt-md="" ng-show="meth2">Arbre de Decision</h3>-->
+          <h4 hide-xs="" ng-show="meth1">Bayes</h1>
+          <!--<h5 hide-gt-md="" ng-show="meth1">Bayes</h3>-->
+        </div>
+        <md-card ng-view="" class="page" flex>
+        </md-card>
+        <div flex="15"></div>
+      </md-content>
+    </div>
+
+
+
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/materialize/dist/js/materialize.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/pdfmake/build/pdfmake.js"></script>
+    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+    <script src="bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/main.js"></script>
+        <script src="scripts/services/serviceajax.js"></script>
+        <script src="scripts/controllers/dialogimportcontroller.js"></script>
+        <script src="scripts/directives/sheet-js-import.js"></script>
+        <script src="scripts/services/sheetjsservice.js"></script>
+        <script src="scripts/services/hostservice.js"></script>
+        <script src="scripts/directives/sheet-js-excute.js"></script>
+        <script src="scripts/controllers/resultat.js"></script>
+        <script src="scripts/controllers/resultatnum.js"></script>
+        <!-- endbuild -->
+</body>
+</html>
